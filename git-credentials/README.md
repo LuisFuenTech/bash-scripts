@@ -9,6 +9,7 @@
 
    setGitUser(){ sudo sh "${SCRIPTS_PATH}/git-credentials/init.sh" "$1" "$2" "$3" }
    setMyGitUser(){ sudo sh "${SCRIPTS_PATH}/git-credentials/mine.sh" "$1" "$2" }
+   setGitToken(){ sudo sh "${SCRIPTS_PATH}/git-credentials/token.sh" "$1" "$2" }
    ```
 
 4. Reset the terminal with `source .[zshrc|bashrc]`
