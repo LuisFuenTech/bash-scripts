@@ -32,52 +32,52 @@ IS_INSTALL_OPTIONAL=false
 
 function checkError() {
     if [[ $ERROR == true ]]; then
-        echo "[Error]: Script couldn't run successfully 💥"
+        echo "\033[0;31m[Error]: Script couldn't run successfully 💥"
         exit 1
     fi
 
     if [ $NPM_ERROR == true ]; then
-        echo "[npm Error]: We cannot install NPM dependencies 💥"
+        echo "\033[0;31m[npm Error]: We cannot install NPM dependencies 💥"
         exit 1
     fi
 }
 
 function removeNpmModules() {
-    echo "Init NPM dependencies removing...⏳" && sleep 0.5
-    echo "|----->\tMoving to $PWD... 🚀" && sleep 0.5
+    echo "\033[0;36m$(date +"%Y-%m-%d %T") Init NPM dependencies removing...⏳" && sleep 0.5
+    echo "\033[0;32m$(date +"%Y-%m-%d %T") |----->Moving to $PWD... 🚀" && sleep 0.5
     cd $PWD || ERROR=true
     checkError
 
     if [[ -f $PACKAGE_LOCK ]]; then
         ACTION_FLAG=true
-        echo "|----->\tRemoving '$PACKAGE_LOCK' file...⚙️" && sleep 0.5
+        echo "\033[0;32m$(date +"%Y-%m-%d %T") |----->Removing '$PACKAGE_LOCK' file...⚙️" && sleep 0.5
         rm $PACKAGE_LOCK || ERROR=true
         checkError
 
-        echo "\t|_____'$PACKAGE_LOCK' file removed! ✅" && sleep 0.5
+        echo "\033[0;32m$(date +"%Y-%m-%d %T") \t|______'$PACKAGE_LOCK' file removed! ✅" && sleep 0.5
     fi
 
     if [[ -d $NODE_MODULES ]]; then
         ACTION_FLAG=true
-        echo "|----->\tRemoving '$NODE_MODULES' directory...⚙️" && sleep 0.5
+        echo "\033[0;32m$(date +"%Y-%m-%d %T") |----->Removing '$NODE_MODULES' directory...⚙️" && sleep 0.5
         rm -rf $NODE_MODULES || ERROR=true
         checkError
 
-        echo "\t|_____'$NODE_MODULES' directory removed! ✅" && sleep 0.5
+        echo "\033[0;32m$(date +"%Y-%m-%d %T") \t|______'$NODE_MODULES' directory removed! ✅" && sleep 0.5
     fi
 
     if [[ $ACTION_FLAG == false ]]; then
-        echo "\nThere's nothing to remove! 🗑\n" && sleep 0.5
+        echo "\033[0;36m\n$(date +"%Y-%m-%d %T") There's nothing to remove! 🗑\n" && sleep 0.5
     else
-        echo "NPM dependencies were removed! ✅\n" && sleep 0.5
+        echo "\033[0;36m$(date +"%Y-%m-%d %T") NPM dependencies were removed! ✅\n" && sleep 0.5
     fi
 
 }
 
 function installNpmModules() {
-    echo "Init NPM dependencies installing...⏳" && sleep 0.5
+    echo "\033[0;36m$(date +"%Y-%m-%d %T") Init NPM dependencies installing...⏳" && sleep 0.5
     if [[ -f $PACKAGE ]]; then
-        echo "|----->\tInstalling NPM dependencies...⚙️" && sleep 0.5
+        echo "\033[0;32m$(date +"%Y-%m-%d %T") |----->Installing NPM dependencies...⚙️" && sleep 0.5
 
         if [[ $IS_INSTALL_OPTIONAL == true ]]; then
             npm i $ENTRY_OPTIONAL_COMMAND || NPM_ERROR=true
@@ -87,15 +87,15 @@ function installNpmModules() {
 
         checkError
 
-        echo "NPM dependencies installed! ✅" && sleep 0.5
+        echo "\033[0;36m$(date +"%Y-%m-%d %T") NPM dependencies installed! ✅" && sleep 0.5
     else
-        echo "This directory doesn't have '$PACKAGE' file" && sleep 0.5
+        echo "\033[0;36m$(date +"%Y-%m-%d %T") This directory doesn't have '$PACKAGE' file" && sleep 0.5
     fi
 }
 
 if [[ -z $@ ]] || [[ $# -eq 0 ]]; then
-    echo "Empty arguments"
-    echo "$COMMAND_MAN"
+    echo "\033[0;31m$(date +"%Y-%m-%d %T") Empty arguments"
+    echo "\033[0;36m$(date +"%Y-%m-%d %T") $COMMAND_MAN"
     exit 1
 fi
 
@@ -111,8 +111,8 @@ then
     removeNpmModules
     installNpmModules
 else
-    echo "The command '$ENTRY_COMMAND' isn't correct ❌"
-    echo "$COMMAND_MAN"
+    echo "\033[0;31m$(date +"%Y-%m-%d %T") The command '$ENTRY_COMMAND' isn't correct ❌"
+    echo "\033[0;36m$(date +"%Y-%m-%d %T") $COMMAND_MAN"
 fi
 
 exit 1
