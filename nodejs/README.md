@@ -20,7 +20,7 @@
 2. Type and enter any of the _function name_ in the terminal with the params require:
 
 ```bash
-$ handleModules --remove[-r,--install,-i]
+$ handleModules --remove[-r, --install, -i]
 ```
 
 ```bash
