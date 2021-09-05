@@ -38,47 +38,47 @@ function checkError() {
 }
 
 function removeNpmModules() {
-    echo "Init NPM dependencies removing...⏳\n"
-    echo "Moving to $PWD... 🚀\n"
+    echo "Init NPM dependencies removing...⏳\n" && sleep 0.5
+    echo "Moving to $PWD... 🚀\n" && sleep 0.5
     cd $PWD || ERROR=true
     checkError
 
     if [[ -f "$PACKAGE_LOCK" ]]; then
         ACTION_FLAG=true
-        echo "Removing '$PACKAGE_LOCK' file...⚙️"
+        echo "Removing '$PACKAGE_LOCK' file...⚙️" && sleep 0.5
         rm $PACKAGE_LOCK || ERROR=true
         checkError
 
-        echo "'$PACKAGE_LOCK' file removed! ✅\n"
+        echo "'$PACKAGE_LOCK' file removed! ✅\n" && sleep 0.5
     fi
 
     if [[ -d "$NODE_MODULES" ]]; then
         ACTION_FLAG=true
-        echo "Removing '$NODE_MODULES' directory...⚙️"
+        echo "Removing '$NODE_MODULES' directory...⚙️" && sleep 0.5
         rm -rf $NODE_MODULES || ERROR=true
         checkError
 
-        echo "'$NODE_MODULES' directory removed! ✅\n"
+        echo "'$NODE_MODULES' directory removed! ✅\n" && sleep 0.5
     fi
 
     if [[ $ACTION_FLAG == false ]]; then
-        echo "There's nothing to remove! 🗑\n"
+        echo "There's nothing to remove! 🗑\n" && sleep 0.5
     else
-        echo "NPM dependencies were removed! ✅\n"
+        echo "NPM dependencies were removed! ✅\n" && sleep 0.5
     fi
 
 }
 
 function installNpmModules() {
-    echo "Init NPM dependencies installing...⏳\n"
+    echo "Init NPM dependencies installing...⏳\n" && sleep 0.5
     if [[ -f "$PACKAGE" ]]; then
-        echo "Installing NPM dependencies...⚙️\n"
+        echo "Installing NPM dependencies...⚙️\n" && sleep 0.5
         npm i || NPM_ERROR=true
         checkError
 
-        echo "NPM dependencies installed! ✅"
+        echo "NPM dependencies installed! ✅" && sleep 0.5
     else
-        echo "This directory doesn't have '$PACKAGE' file"
+        echo "This directory doesn't have '$PACKAGE' file" && sleep 0.5
     fi
 }
 
