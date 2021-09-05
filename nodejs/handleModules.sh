@@ -10,20 +10,25 @@ NODE_MODULES="node_modules"
 
 # Commands
 ENTRY_COMMAND="$1"
+ENTRY_OPTIONAL_COMMAND="$2"
 REMOVE_COMMAND="--remove"
 REMOVE_SHORT_COMMAND="-r"
 INSTALL_COMMAND="--install"
 INSTALL_SHORT_COMMAND="-i"
+INSTALL_COMMAND="--install"
 
 COMMAND_MAN="
 Usage: handleModules <command>
 
 Commands:
---remove, -r    remove package-lock and node_modules 
---install, -i   clean dependencies and install them from package.json"
+--remove, -r    
+    remove package-lock and node_modules 
+--install, -i   [options]   
+    clean dependencies and install them from package.json"
 
 # Flags
 ACTION_FLAG=false
+IS_INSTALL_OPTIONAL=false
 
 function checkError() {
     if [[ $ERROR == true ]]; then
@@ -43,7 +48,7 @@ function removeNpmModules() {
     cd $PWD || ERROR=true
     checkError
 
-    if [[ -f "$PACKAGE_LOCK" ]]; then
+    if [[ -f $PACKAGE_LOCK ]]; then
         ACTION_FLAG=true
         echo "Removing '$PACKAGE_LOCK' file...⚙️" && sleep 0.5
         rm $PACKAGE_LOCK || ERROR=true
@@ -52,7 +57,7 @@ function removeNpmModules() {
         echo "'$PACKAGE_LOCK' file removed! ✅\n" && sleep 0.5
     fi
 
-    if [[ -d "$NODE_MODULES" ]]; then
+    if [[ -d $NODE_MODULES ]]; then
         ACTION_FLAG=true
         echo "Removing '$NODE_MODULES' directory...⚙️" && sleep 0.5
         rm -rf $NODE_MODULES || ERROR=true
@@ -71,9 +76,15 @@ function removeNpmModules() {
 
 function installNpmModules() {
     echo "Init NPM dependencies installing...⏳\n" && sleep 0.5
-    if [[ -f "$PACKAGE" ]]; then
+    if [[ -f $PACKAGE ]]; then
         echo "Installing NPM dependencies...⚙️\n" && sleep 0.5
-        npm i || NPM_ERROR=true
+
+        if [[ $IS_INSTALL_OPTIONAL == true ]]; then
+            npm i $ENTRY_OPTIONAL_COMMAND || NPM_ERROR=true
+        else
+            npm i || NPM_ERROR=true
+        fi
+
         checkError
 
         echo "NPM dependencies installed! ✅" && sleep 0.5
@@ -83,9 +94,13 @@ function installNpmModules() {
 }
 
 if [[ -z $@ ]] || [[ $# -eq 0 ]]; then
-    echo "Empty arguments. $missingParamsMessage"
+    echo "Empty arguments"
     echo "$COMMAND_MAN"
     exit 1
+fi
+
+if [[ -n $ENTRY_OPTIONAL_COMMAND ]]; then
+    IS_INSTALL_OPTIONAL=true
 fi
 
 if [[ $ENTRY_COMMAND == $REMOVE_COMMAND ]] || [[ $ENTRY_COMMAND == $REMOVE_SHORT_COMMAND ]]; then
