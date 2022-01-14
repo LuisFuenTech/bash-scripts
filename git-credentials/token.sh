@@ -5,6 +5,11 @@ token="$2"
 remote=$(git remote -v | grep fetch)
 GIT_ERROR=false
 ERROR=false
+REMOTE_GITHUB_PATTERN='^(https|http):\/\/github\.com\/(.*)\.git$'
+REMOTE_GITHUB_TOKEN_PATTERN='^(https|http):\/\/[0-9a-zA-Z_]+:[0-9a-zA-Z_]+@github\.com\/(.*)\.git$'
+url=""
+protocolHttp=""
+githubProject=""
 
 function checkError() {
     if [[ $GIT_ERROR == true ]] || [[ ERROR == true ]]; then
@@ -19,15 +24,27 @@ if [[ $# -eq 0 ]] || [[ -z $@ ]]; then
 fi
 
 echo "Reading local origin remote... 👀"
-values=(${remote//})
+values=(${remote/// })
 url=${values[1]}
-urlSplitted=(${url/\/\// })
 
-echo "Assembling new origin remote... 🔨"
-newOriginRemote="${urlSplitted[0]}//$username:$token@${urlSplitted[1]}"
+if [[ $url =~ $REMOTE_GITHUB_PATTERN ]]; then
+    echo "${BASH_REMATCH[0]}"
+    protocolHttp=${BASH_REMATCH[1]}
+    githubProject=${BASH_REMATCH[2]}
+
+elif [[ $url =~ $REMOTE_GITHUB_TOKEN_PATTERN ]]; then
+    echo "${BASH_REMATCH[0]}"
+    protocolHttp=${BASH_REMATCH[1]}
+    githubProject=${BASH_REMATCH[2]}
+else
+    echo "💥 Invalid remote url -> '$url' 💥"
+    exit 1
+fi
+
+echo "Bulding new origin remote... 🔨"
+newOriginRemote="$protocolHttp://$username:$token@github.com/$githubProject.git"
 
 echo "Updating local origin remote... 📝"
-git remo
 git remote set-url origin $newOriginRemote || GIT_ERROR=true
 git config --local credential.helper cache || GIT_ERROR=true
 checkError
