@@ -5,7 +5,7 @@
 3. Paste this in the `zshrc` or `bashrc` file
 
    ```
-   export SCRIPTS_PATH="/Users/{userName}/Scripts"
+   export SCRIPTS_PATH="/Users/{userName}/bash-scripts"
 
    setGitUser(){ sudo sh "${SCRIPTS_PATH}/git-credentials/init.sh" "$1" "$2" "$3" }
    setMyGitUser(){ sudo sh "${SCRIPTS_PATH}/git-credentials/mine.sh" "$1" "$2" }
